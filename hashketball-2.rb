@@ -5,9 +5,8 @@ def game_hash
     home: {
       team_name: "Brooklyn Nets",
       colors: ["black", "white"],
-      players: [
-        {
-          player_name: "Alan Anderson",
+      players: {
+        alan_anderson: {
           number: 0,
           shoe: 16,
           points: 22,
@@ -17,8 +16,7 @@ def game_hash
           blocks: 1,
           slam_dunks: 1
         },
-        {
-          player_name: "Reggie Evans",
+        reggie_evans: {
           number: 30,
           shoe: 14,
           points: 12,
@@ -28,8 +26,7 @@ def game_hash
           blocks: 12,
           slam_dunks: 7
         },
-        {
-          player_name: "Brook Lopez",
+        brook_lopez: {
           number: 11,
           shoe: 17,
           points: 17,
@@ -39,8 +36,7 @@ def game_hash
           blocks: 1,
           slam_dunks: 15
         },
-        {
-          player_name: "Mason Plumlee",
+        mason_plumlee: {
           number: 1,
           shoe: 19,
           points: 26,
@@ -50,8 +46,7 @@ def game_hash
           blocks: 8,
           slam_dunks: 5
         },
-        {
-          player_name: "Jason Terry",
+        jason_terry: {
           number: 31,
           shoe: 15,
           points: 19,
@@ -61,14 +56,13 @@ def game_hash
           blocks: 11,
           slam_dunks: 1
         }
-      ]
+      }
     },
     away: {
       team_name: "Charlotte Hornets",
       colors: ["turquoise", "purple"],
-      players: [  
-        {
-          player_name: "Jeff Adrien",
+      players: {  
+        jeff_adrien: {
           number: 4,
           shoe: 18,
           points: 10,
@@ -78,8 +72,7 @@ def game_hash
           blocks: 7,
           slam_dunks: 2
         },
-        {
-          player_name: "Bismak Biyombo",
+        bismak_biyombo: {
           number: 0,
           shoe: 16,
           points: 12,
@@ -89,8 +82,7 @@ def game_hash
           blocks: 15,
           slam_dunks: 10
         },
-        {
-          player_name: "DeSagna Diop",
+        desagna_diop: {
           number: 2,
           shoe: 14,
           points: 24,
@@ -100,8 +92,7 @@ def game_hash
           blocks: 5,
           slam_dunks: 5
         },
-        {
-          player_name: "Ben Gordon",
+        ben_gordon: {
           number: 8,
           shoe: 15,
           points: 33,
@@ -111,8 +102,7 @@ def game_hash
           blocks: 1,
           slam_dunks: 0
         },
-        {
-          player_name: "Brendan Haywood",
+        brendan_haywood: {
           number: 33,
           shoe: 15,
           points: 6,
@@ -122,7 +112,7 @@ def game_hash
           blocks: 5,
           slam_dunks: 12
         }
-      ]
+      }
     }
   }
 end
@@ -131,9 +121,9 @@ def num_points_scored(player_name)
   game_hash.each do |home_away, data|
     data.each do |details, attributes|
       if details == :players
-        attributes.each do |player|
-          if player[:player_name] == player_name
-             return player[:points]
+        attributes.each do |player, stats|
+          if player.to_s == player_name.downcase.split(" ").join("_")
+             return stats[:points]
           end
         end
       end
@@ -145,9 +135,9 @@ def shoe_size(player_name)
   game_hash.each do |home_away, data|
     data.each do |details, attributes|
       if details == :players
-        attributes.each do |player|
-          if player[:player_name] == player_name
-             return player[:shoe]
+        attributes.each do |player, stats|
+          if player.to_s == player_name.downcase.split(" ").join("_")
+             return stats[:shoe]
           end
         end
       end
@@ -182,8 +172,8 @@ def player_numbers(team_name)
   game_hash.each do |home_away, data|
     data.each do |details, attributes|
       if attributes == team_name
-        data[:players].each do |player|
-          player_numbers << player[:number]
+        data[:players].each do |player, stats|
+          player_numbers << stats[:number]
         end
       end
     end
@@ -195,11 +185,10 @@ def player_stats(player_name)
   game_hash.each do |home_away, data|
     data.each do |details, attributes|
       if details == :players
-        attributes.each do |player|
-          if player[:player_name] == player_name
-            player.delete(:player_name)
-            return player
-          end
+        attributes.each do |player, stats|
+          if player.to_s == player_name.downcase.split(" ").join("_")
+             return stats
+           end
          end
        end
      end
@@ -213,13 +202,13 @@ def big_shoe_rebounds
   game_hash.each do |home_away, data|
     data.each do |details, attributes|
       if details == :players
-        attributes.each do |player|
+        attributes.each do |player, stats|
           if largest_shoe_size == nil
-            largest_shoe_size = player[:shoe]
-            rebound_tracker = player[:rebounds]
-          elsif player[:shoe] > largest_shoe_size
-            largest_shoe_size = player[:shoe]
-            rebound_tracker = player[:rebounds]
+            largest_shoe_size = stats[:shoe]
+            rebound_tracker = stats[:rebounds]
+          elsif stats[:shoe] > largest_shoe_size
+            largest_shoe_size = stats[:shoe]
+            rebound_tracker = stats[:rebounds]
           end
         end
       end
