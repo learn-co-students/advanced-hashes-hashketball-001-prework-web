@@ -153,26 +153,37 @@ def num_points_scored(name)
   game_hash.each do |location, team_data|
     #Iterate over the second level of the hash (ex. :team name)
       team_data.each do |attribute, data|
-        #Iterate over the third level (ex. Brooklyn Nets)
-        data.each do |item|
-          #Is the value a hash?
-            if item.class == Hash 
-            #If yes, go through the hash (ex. :shoe => 10) 
-              item.each do |k, v|
-                if k == name
-                  v.collect do |category, val|
-                    if category == :points
-                      return v[category]
-                    end
-                    #binding.pry
-                  end
+        if attribute == :players 
+          data.each do |player|
+            player.each do |p_name, data|
+              #data.each do |k,v|
+                #binding.pry
+                if data[:player_name] == name
+                  return data[:points]
                 end
-              end
+              #end
             end
+          end
         end
       end
   end
 end 
+
+ #Iterate over the third level (ex. Brooklyn Nets)
+        # data.each do |item|
+        #   #Is the value a hash?
+        #     if item.class == Hash 
+        #     #If yes, go through the hash (ex. :shoe => 10) 
+        #       item.each do |k, v|
+        #         if k == name
+        #           v.collect do |category, val|
+        #             if category == :points
+        #               return v[category]
+        #             end
+        #             #binding.pry
+        #           end
+        #         end
+        #       end
 
 def shoe_size(name)
   game_hash.each do |location, team_data|
@@ -306,10 +317,28 @@ def big_shoe_rebounds
   rebounds
 end
 
-
-
-
-
+# BONUS
+def most_points_scored
+  most_points = 0
+  pts = 0
+  player_and_points = {}
+  game_hash.each do | location, team_data |
+    team_data.each do | attribute, details |
+      binding.pry
+      if attribute = :players 
+        pts = details[:points]
+        if pts > most_points
+          pts = most_points
+          player_and_points = {}
+          player_and_points[details[:points].key] = details[:points]
+        end
+      end
+    end
+  end
+  most_scoring_player = player_and_points.keys
+  
+  player_and_points[0]
+end 
 
 
 
