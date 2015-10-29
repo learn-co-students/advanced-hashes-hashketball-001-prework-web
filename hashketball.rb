@@ -210,13 +210,13 @@ def game_hash
             if value.is_a?(Hash)
               return_stats.merge!(value)                
             else
-              return_stats[key] = value
+              return_stats[key] = value if key != :name
             end
           end
         end
       end
     end
-    return_stats.delete_if {|key, value| key == :name }
+   return_stats
   end
 
   def big_shoe_rebounds
@@ -231,9 +231,74 @@ def game_hash
         end
       end
     end 
-  
     rebounds
   end
+
+  def most_points_scored
+    name = ""
+    cur_biggest = 0
+    biggest_name = ""
+    game_hash.each do |location, team_data|
+      team_data[:players].each do |attribute, data|
+        if cur_biggest < num_points_scored(data[:name])
+          cur_biggest = num_points_scored(data[:name])                  
+          name = data[:name]
+        end
+      end
+    end 
+    name
+  end
+
+  def most_steals
+    name = ""
+    cur_biggest = 0
+    biggest_name = ""
+    game_hash.each do |location, team_data|
+      team_data[:players].each do |attribute, data|
+        if cur_biggest < data[:stats][:steals]
+          cur_biggest = data[:stats][:steals]                 
+          name = data[:name]
+        end
+      end
+    end 
+    name
+  end  
+
+  def winning_team
+    team_scores = {}
+    game_hash.each do |location, team_data|
+      team_scores[team_data[:team_name]] = 0
+      team_data[:players].each do |attribute, data|
+        team_scores[team_data[:team_name]] += num_points_scored(data[:name])
+      end
+    end
+    team_scores.max_by{ |team, score| score }[0]
+  end
+
+  def player_with_longest_name
+    name = ""
+    cur_biggest = 0
+    biggest_name = ""
+    game_hash.each do |location, team_data|
+      team_data[:players].each do |attribute, data|
+        if cur_biggest < data[:name].size
+          cur_biggest = data[:name].size                
+          name = data[:name]
+        end
+      end
+    end 
+    name
+  end
+
+  def long_name_steals_a_ton?
+    most_steals == player_with_longest_name
+  end
+ 
+
+
+
+
+  
     
 
 
