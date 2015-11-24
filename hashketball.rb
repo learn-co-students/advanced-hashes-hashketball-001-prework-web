@@ -122,3 +122,23 @@ def game_hash
     }
   }
 end
+
+def num_points_scored(player)
+  output = nil
+  game_hash.each do |team, att|
+    game_hash[team][:players].each do |plyr_att|
+      plyr_att.has_value?(player) ? output = plyr_att.fetch(:points).to_i : nil
+    end
+  end
+  output
+end
+
+def shoe_size(player)
+  output = nil
+  game_hash.each do |team, att|
+    game_hash[team][:players].each do |plyr_att|
+      plyr_att.has_value?(player) ? output = plyr_att.fetch(:shoe).to_i : nil
+    end
+  end
+  output
+end
