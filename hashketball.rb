@@ -178,3 +178,18 @@ def player_stats(player)
   end
   output
 end
+
+def big_shoe_rebounds
+  shoe_sizes = []
+  game_hash.each do |team, att|
+    game_hash[team][:players].each do |key, value|
+      shoe_sizes << key[:shoe]
+    end
+  end
+  
+  #return :rebounds using :shoe_size
+  shoe_sizes.sort.pop
+
+end
+
+#puts big_shoe_rebounds
