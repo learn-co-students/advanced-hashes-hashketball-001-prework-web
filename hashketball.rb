@@ -123,7 +123,7 @@ def game_hash
   }
 end
 
-def player_stat(player, stat)
+def stat_query(player, stat)
   output = nil
   game_hash.each do |team, att|
     game_hash[team][:players].each do |plyr_att|
@@ -134,11 +134,11 @@ def player_stat(player, stat)
 end
 
 def num_points_scored(player)
-  player_stat(player, :points)
+  stat_query(player, :points)
 end
 
 def shoe_size(player)
-  player_stat(player, :shoe)
+  stat_query(player, :shoe)
 end
 
 def team_colors(team)
@@ -154,5 +154,15 @@ end
 def team_names
   output = []
   game_hash.each { |team, att| output << att[:team_name] }
+  output
+end
+
+def player_numbers(team)
+  output = []
+  game_hash.each do |team_list, att|
+    if att[:team_name] == team
+       att[:players].each { |plyr_att, val| output << plyr_att[:number].to_i }
+    end
+  end
   output
 end
