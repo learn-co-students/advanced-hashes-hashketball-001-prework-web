@@ -179,7 +179,7 @@ def player_stats(player)
   output
 end
 
-# tests pass, but could be optimized
+# test passes, but could be optimized
 def big_shoe_rebounds
   shoe_sizes = []
   output = nil
