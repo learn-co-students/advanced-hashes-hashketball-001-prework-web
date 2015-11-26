@@ -179,17 +179,14 @@ def player_stats(player)
   output
 end
 
+# tests pass, but could be optimized
 def big_shoe_rebounds
   shoe_sizes = []
+  output = nil
   game_hash.each do |team, att|
-    game_hash[team][:players].each do |key, value|
-      shoe_sizes << key[:shoe]
-    end
+    game_hash[team][:players].each { |k, v| shoe_sizes << k[:shoe] }
+    game_hash[team][:players].each { |k, v|
+      k[:shoe] == shoe_sizes.sort.pop ? output = k[:rebounds] : nil }
   end
-  
-  #return :rebounds using :shoe_size
-  shoe_sizes.sort.pop
-
+  output  
 end
-
-#puts big_shoe_rebounds
