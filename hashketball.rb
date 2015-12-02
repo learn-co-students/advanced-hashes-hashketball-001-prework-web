@@ -140,21 +140,21 @@ end
 
 
 def num_points_scored(player_name)
-  points = 0
+  player_points = 0
   game_hash.each do |location, team_data|
     team_data.each do |attribute, data|
       if attribute == :players
-        data.each do |name_key, stat_hash|
-          stat_hash.each do |key, value|
+        data.each do |key_name, stats|
+          stats.each do |key, value|
             if key == :player_name && value == player_name
-              points = stat_hash[:points]
+              player_points = stats[:points]
             end
           end
         end
       end
     end
   end
-  points
+  player_points
 end
 
 def shoe_size(player_name)
@@ -162,10 +162,10 @@ def shoe_size(player_name)
   game_hash.each do |location, team_data|
     team_data.each do |attribute, data|
       if attribute == :players
-        data.each do |name_key, stat_hash|
-          stat_hash.each do |key, value|
+        data.each do |key_name, stats|
+          stats.each do |key, value|
             if key == :player_name && value == player_name
-              points = stat_hash[:shoe]
+              points = stats[:shoe]
             end
           end
         end
@@ -188,15 +188,15 @@ def team_colors(team_name)
 end
 
 def team_names
-  points = []
+  team_names = []
   game_hash.each do |location, team_data|
     team_data.each do |attribute, data|
       if attribute == :team_name
-        points << data
+        team_names << data
       end
     end
   end
-  points
+  team_names
 end
 
 def player_numbers(player_name)
@@ -205,8 +205,8 @@ def player_numbers(player_name)
     if team_data[:team_name] == player_name
       team_data.each do |attribute, data|
         if attribute == :players
-          data.each do |name_key, stat_hash|
-            stat_hash.each do |key, value|
+          data.each do |key_name, stats|
+            stats.each do |key, value|
               if key == :number
                 points << value.to_i
               end
@@ -224,10 +224,10 @@ def player_stats(player_name)
   game_hash.each do |location, team_data|
     team_data.each do |attribute, data|
       if attribute == :players
-        data.each do |name_key, stat_hash|
-          stat_hash.each do |key, value|
+        data.each do |key_name, stats|
+          stats.each do |key, value|
             if key == :player_name && value == player_name
-              points = stat_hash.delete_if do |k, v|
+              points = stats.delete_if do |k, v|
                 k == :player_name
               end
             end
