@@ -1,7 +1,7 @@
 require 'pry'
 
 def game_hash
-    games = {
+     {
         :home => {
             :team_name => "Brooklyn Nets",
             :colors => ["Black","White"],
@@ -112,32 +112,46 @@ def game_hash
         }
 
     }
-    return games
+
 end
 
 def num_points_scored(player)
-  games = game_hash
-  points_scored = nil
+  # points_scored = nil
+  #
+  # game_hash.collect do |team, team_data|
+  #   team_data.collect do |attributes, data|
+  #     if attributes == :players
+  #       data.each do |player_hash|
+  #         if player_hash[:player_name] == player
+  #           points_scored = player_hash[:points]
+  #         end
+  #       end
+  #     end
+  #   end
+  # end
+  # points_scored
 
-  games.collect do |team, team_data|
-    team_data.collect do |attributes, data|
-      if attributes == :players
-        data.each do |player_hash|
-          if player_hash[:player_name] == player
-            points_scored = player_hash[:points]
-          end
-        end
-      end
+  result = nil
+  all_players.find do |player_data|
+    if player_data[:player_name] == player
+      result = player_data[:points]
     end
   end
-  points_scored
+  result
 end
 
+#new method
+def all_players
+  home_players = game_hash[:home][:players]
+  away_players = game_hash[:away][:players]
+  home_players.concat(away_players)
+end
+
+
 def shoe_size(player)
-  games = game_hash
   shoe_man = nil
 
-  games.collect do |team, team_data|
+  game_hash.collect do |team, team_data|
     team_data.collect do |attributes, data|
       if attributes == :players
         data.each do |player_hash|
@@ -152,65 +166,93 @@ def shoe_size(player)
 end
 
 def team_colors(team_name)
-  games = game_hash
-  colors = []
+  #colors = []
 
-  games.collect do |team, team_data|
-    team_data.collect do |attributes, data|
-      if attributes == :colors
-        data.each do |team_color|
-          if games[team][:team_name] == team_name
-            colors << team_color
-          end
-        end
-      end
-    end
+  # games_hash.collect do |team, team_data|
+  #   team_data.collect do |attributes, data|
+  #     if attributes == :colors
+  #       data.each do |team_color|
+  #         if games_hash[team][:team_name] == team_name
+  #           colors << team_color
+  #         end
+  #       end
+  #     end
+  #   end
+  # end
+  # colors
+
+  result = game_hash.find do |location, team_data|
+    team_data[:team_name] == team_name
   end
-  colors
+  _location, data = result
+  data[:colors]
 end
 
-def team_names
-  games = game_hash
-  team_name_array = []
 
-  games.collect do |team, team_data|
-    team_data.collect do |attributes, data|
-      if attributes == :team_name
-        team_name_array << data
-      end
-    end
+def team_names
+  # team_name_array = []
+  #
+  # game_hash.collect do |team, team_data|
+  #   team_data.collect do |attributes, data|
+  #     if attributes == :team_name
+  #       team_name_array << data
+  #     end
+  #   end
+  # end
+  # team_name_array
+
+  all_teams.map do |team|
+    team[:team_name]
   end
-  team_name_array
+end
+
+#new method
+def all_teams
+  # home_team = game_hash[:home]
+  # away_team = game_hash[:away]
+  # [home_team, away_team]
+  game_hash.values
 end
 
 def player_numbers(team_name)
-  games = game_hash
-  team_jerseys = []
+  # team_jerseys = []
+  #
+  # game_hash.each do |team, team_data|
+  #   team_data.each do |attributes, data|
+  #     if attributes == :players
+  #       data.each do |player_hash|
+  #         player_hash.each do |att, val|
+  #           if games_hash[team][:team_name] == team_name
+  #             team_jerseys << player_hash[:number]
+  #           end
+  #         end
+  #       end
+  #     end
+  #   end
+  # end
+  # team_jerseys = team_jerseys.uniq
 
-  games.each do |team, team_data|
-    team_data.each do |attributes, data|
-      if attributes == :players
-        data.each do |player_hash|
-          player_hash.each do |att, val|
-            if games[team][:team_name] == team_name
-              team_jerseys << player_hash[:number]
-            end
-          end
-        end
-      end
-    end
+  team = find_team_by_name(team_name)
+  team[:players].map do |stats|
+    stats[:number]
   end
-  team_jerseys = team_jerseys.uniq
 end
 
-def player_stats(player)
-  games = game_hash
-  stats = {}
+#new method
+def find_team_by_name(team_name)
+  all_teams.find do |team|
+    team.has_value?(team_name)
+  end
+end
 
-  games.collect do |team, team_data|
+
+
+def player_stats(player)
+  stats = {}
+  game_hash.collect do |team, team_data|
     team_data.collect do |attributes, data|
       if attributes == :players
-        data.each do |player_hash|
+        data.collect do |player_hash|
           if player_hash[:player_name] == player
             stats = player_hash
           end
@@ -224,38 +266,46 @@ def player_stats(player)
   stats
 end
 
-def big_shoe_rebounds
-  games = game_hash
-  big_shoe_size = 0
-  big_shoe_name = ""
-  rebound = nil
 
-  games.collect do |team, team_data|
-    team_data.collect do |attributes, data|
-      if attributes == :players
-        data.each do |player_hash|
-          player_hash.each do |att, val|
-            if att == :shoe
-              if player_hash[:shoe] > big_shoe_size
-                big_shoe_size = player_hash[:shoe]
-                big_shoe_name = player_hash[:player_name]
-              end
-            end
-          end
-        end
-      end
-    end
+
+def big_shoe_rebounds
+  # big_shoe_size = 0
+  # big_shoe_name = ""
+  # rebound = nil
+  #
+  # game_hash.collect do |team, team_data|
+  #   team_data.collect do |attributes, data|
+  #     if attributes == :players
+  #       data.each do |player_hash|
+  #         player_hash.each do |att, val|
+  #           if att == :shoe
+  #             if player_hash[:shoe] > big_shoe_size
+  #               big_shoe_size = player_hash[:shoe]
+  #               big_shoe_name = player_hash[:player_name]
+  #             end
+  #           end
+  #         end
+  #       end
+  #     end
+  #   end
+  # end
+  # game_hash.collect do |team, team_data|
+  #   team_data.collect do |attributes, data|
+  #     if attributes == :players
+  #       data.each do |player_hash|
+  #         if player_hash[:player_name] == big_shoe_name
+  #           rebound = player_hash[:rebounds]
+  #         end
+  #       end
+  #     end
+  #   end
+  # end
+  # rebound
+
+  sorted = all_players.sort_by do |stats|
+    stats[:shoe]
   end
-  games.collect do |team, team_data|
-    team_data.collect do |attributes, data|
-      if attributes == :players
-        data.each do |player_hash|
-          if player_hash[:player_name] == big_shoe_name
-            rebound = player_hash[:rebounds]
-          end
-        end
-      end
-    end
-  end
-  rebound
+  _name, stats = sorted.first
+
+  _name[:rebounds]
 end
