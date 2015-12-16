@@ -178,7 +178,7 @@ end
 
 def big_shoe_rebounds
   num = 0
-  play_name = nil
+  play_name=nil
   game_hash[:home][:players].each do |name,stat|
     stat.each do |cat, val|
       if cat == :shoe && val > num
