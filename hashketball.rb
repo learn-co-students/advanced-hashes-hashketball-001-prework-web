@@ -198,7 +198,6 @@ def most_points_scored
 end
 
 def winning_team
-#    all_points_home = game_hash[:home][:players][:point]
     all_points_home = game_hash[:home][:players].collect do |player|
         player[:points]
         end
@@ -222,14 +221,30 @@ def winning_team
 end
 
 def player_with_longest_name
-
+    all_names = all_players(game_hash).keys
+    longest = all_names.collect do |name|
+        name.length
+    end.max
+    all_names.each do |name|
+        if name.length == longest
+            return name
+        end
+    end
 end
 
 #Super Bonus:
 
 def long_name_steals_a_ton
-    
+    most_steals = all_players(game_hash).collect do |name, stats|
+        stats[:steals]
+    end.max
+    all_players(game_hash).each do |name, stats|
+        if stats[:steals] == most_steals
+            if stats[:player_name] == player_with_longest_name
+                return true
+            end
+        end
+    end
 end
-
 
 
