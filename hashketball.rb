@@ -184,32 +184,52 @@ def big_shoe_rebounds
     end
 end
 
-#def player_stats(that_guy)
-#    player_stats = Hash.new
-#    game_hash.each do |location, team|
-#        team.each do |attribute, data|
-#            if attribute == :players
-#                data.each do |player|
-#                    if player[:player_name] == that_guy
-#                       player.each do |player_att, player_data|
-#                            if !(player_att == :player_name)
-#                                player_stats[player_att] = player_data
-#                            end
-#                       end 
-#                    end
-#                end
-#            end
-#        end
-#    end
-#    player_stats
-#end
+#Bonus Round:
 
+def most_points_scored
+    most_points = all_players(game_hash).collect do |name, stats|
+        stats[:points]
+    end.max
+    all_players(game_hash).each do |name, stats|
+        if stats[:points] == most_points
+            return stats[:player_name]
+        end
+    end
+end
 
+def winning_team
+#    all_points_home = game_hash[:home][:players][:point]
+    all_points_home = game_hash[:home][:players].collect do |player|
+        player[:points]
+        end
+    sum_point_home = 0
+    all_points_home.each do |point|
+        sum_point_home = sum_point_home + point
+    end 
+    all_points_away = game_hash[:away][:players].collect do |player|
+        player[:points]
+        end
+    sum_point_away = 0
+    all_points_away.each do |point|
+        sum_point_away = sum_point_away + point
+    end 
+    
+    if sum_point_home > sum_point_away
+        "Brooklyn Nets"
+    else
+        "Charlotte Hornets"
+    end
+end
 
+def player_with_longest_name
 
+end
 
+#Super Bonus:
 
-
+def long_name_steals_a_ton
+    
+end
 
 
 
