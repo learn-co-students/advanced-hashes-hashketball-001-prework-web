@@ -1,6 +1,6 @@
 # Write your code here!
 def game_hash
-  hash={
+  game_hash={
     home: {
       team_name: "Brooklyn Nets", 
       colors: ["Black", "White"], 
@@ -178,7 +178,7 @@ end
 
 def big_shoe_rebounds
   num = 0
-  play_name=nil
+  play_name = nil
   game_hash[:home][:players].each do |name,stat|
     stat.each do |cat, val|
       if cat == :shoe && val > num
@@ -190,6 +190,76 @@ def big_shoe_rebounds
   game_hash[:home][:players][play_name][:rebounds] 
 end
 
+def most_points_scored
+  num = 0
+  play_name = nil
+  game_hash[:home][:players].each do |name,stat|
+    stat.each do |cat, val|
+      if cat == :points && val > num
+        num = val
+        play_name = name
+      end
+    end
+  end
+  game_hash[:away][:players].each do |name,stat|
+    stat.each do |cat, val|
+      if cat == :points && val > num
+        num = val
+        play_name = name
+      end
+    end
+  end
+  play_name
+end
 
+def winning_team
+  awy_pnts = 0
+  hme_pnts = 0
+  game_hash[:home][:players].each do |plyr, stat|
+    game_hash[:home][:players][plyr].each do |cat, int|
+      if cat == :points
+        hme_pnts += int
+      end
+    end
+  end 
+  game_hash[:away][:players].each do |plyr, stat|
+    game_hash[:away][:players][plyr].each do |cat, int|
+      if cat == :points
+        awy_pnts += int
+      end
+    end
+  end 
+  if hme_pnts > awy_pnts
+    game_hash[:home][:team_name]
+  else
+    game_hash[:away][:team_name]    
+  end
+end  
+
+def player_with_longest_name
+  name_length = 0
+  ply_name = nil
+  game_hash[:home][:players].each do |plyr, stat|
+    if plyr.length > name_length
+      name_length = plyr.length
+      ply_name = plyr 
+    end
+  end 
+  game_hash[:away][:players].each do |plyr, stat|
+    if plyr.length > name_length
+      name_length = plyr.length
+      ply_name = plyr 
+    end
+  end 
+  ply_name
+end  
+
+def long_name_steals_a_ton?
+  if game_hash[:away][:players][player_with_longest_name][:steals] > 10
+    true 
+  elsif game_hash[:home][:players][player_with_longest_name][:steals] > 10
+    true
+  end 
+end
 
 
