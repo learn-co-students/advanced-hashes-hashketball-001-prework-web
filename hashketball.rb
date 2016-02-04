@@ -185,9 +185,9 @@ def most_points_scored
 end
 
 def team_score(team)
-  score = 0
-  game_hash.fetch(team).fetch(:players).each {|player| score += player.fetch(:points)}
-  score
+  #score = 0
+  game_hash.fetch(team).fetch(:players).inject(0) {|total, player| total + player.fetch(:points)}
+  #score
 end
 
 def winning_team
