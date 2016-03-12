@@ -207,3 +207,87 @@ def big_shoe_rebounds
   end
   num_rebounds
 end
+
+def most_points_scored
+  points = 0
+  top_player = nil
+  game_hash.each do |place, team_info|
+    team_info.each do |attribute, data|
+      if attribute == :players
+        data.each do |name, stats| 
+          if stats[:points] > points
+            points = stats[:points]
+            top_player = name
+          end
+        end
+      end
+    end
+  end
+  top_player
+end
+
+def winning_team
+  nets_points = 0
+  hornets_points = 0
+  game_hash[:home].each do |attribute, data|
+    if attribute == :players
+      data.each do |name, stats|
+        nets_points = nets_points + stats[:points] 
+      end
+    end
+  end
+  game_hash[:away].each do |attribute, data|
+    if attribute == :players
+      data.each do |name, stats|
+        hornets_points = hornets_points + stats[:points] 
+      end
+    end
+  end
+  if nets_points > hornets_points
+    return "Brooklyn Nets"
+  else  
+    return "Charlotte Hornets"
+  end
+end
+
+def player_with_longest_name
+  longest_name = ""
+  game_hash.each do |place, team_info|
+    team_info.each do |attribute, data|
+      if attribute == :players
+        data.each do |name, stats| 
+          if name.length > longest_name.length
+            longest_name = name
+          end
+        end
+      end
+    end
+  end
+  longest_name
+end
+
+def long_name_steals_a_ton?
+  longest_name = ""
+  most_steals = 0
+  player_with_most_steals = ""
+  game_hash.each do |place, team_info|
+    team_info.each do |attribute, data|
+      if attribute == :players
+        data.each do |name, stats| 
+          if name.length > longest_name.length
+            longest_name = name
+          end
+          if stats[:steals] > most_steals
+            most_steals = stats[:steals]
+            player_with_most_steals = name
+          end
+        end
+      end
+    end
+  end
+  if longest_name == player_with_most_steals
+    true
+  else
+    false
+  end
+end
