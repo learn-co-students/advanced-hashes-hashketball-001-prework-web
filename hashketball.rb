@@ -1,10 +1,10 @@
 require 'pry'
 
 def game_hash 
-  game_hash = {
+  {
     :home => {
       :team_name => "Brooklyn Nets",
-      :colors => ["black", "white"],
+      :colors => ["Black", "White"],
       :players => {
           "Alan Anderson" => {
           :number => 0,
@@ -15,7 +15,7 @@ def game_hash
           :steals => 3,
           :blocks => 1,
           :slam_dunks => 1
-        },
+          },
           "Reggie Evans" => {
           :number => 30,
           :shoe => 14,
@@ -25,7 +25,7 @@ def game_hash
           :steals => 12,
           :blocks => 12,
           :slam_dunks => 7
-        },
+          },
          "Brook Lopez" => {
           :number => 11,
           :shoe => 17,
@@ -35,8 +35,8 @@ def game_hash
           :steals => 3,
           :blocks => 1,
           :slam_dunks => 15
-        },
-        "Mason Plumlee" => {
+          },
+          "Mason Plumlee" => {
           :number => 1,
           :shoe => 19,
           :points => 26,
@@ -45,8 +45,8 @@ def game_hash
           :steals => 3,
           :blocks => 8,
           :slam_dunks => 5
-        },
-        "Jason Terry" => {
+          },
+          "Jason Terry" => {
           :number => 31,
           :shoe => 15,
           :points => 19,
@@ -57,14 +57,13 @@ def game_hash
           :slam_dunks => 1 
         }
       }
-      },
+    },
            
   :away => {
     :team_name => "Charlotte Hornets",
-    :colors => ["turquoise", "purple"],
-    :players => {
-      
-        "Jeff Adrien " => {
+    :colors => ["Turquoise", "Purple"],
+    :players => {  
+        "Jeff Adrien" => {
         :number => 4,
         :shoe => 18,
         :points => 10,
@@ -73,7 +72,7 @@ def game_hash
         :steals => 2,
         :blocks => 7,
         :slam_dunks => 2
-      },
+        },
         "Bismak Biyombo" => {
         :number => 0,
         :shoe => 16,
@@ -83,7 +82,7 @@ def game_hash
         :steals => 7,
         :blocks => 15,
         :slam_dunks => 10
-      },
+        },
         "DeSagna Diop" => {
         :number => 2,
         :shoe => 14,
@@ -93,7 +92,7 @@ def game_hash
         :steals => 4,
         :blocks => 5,
         :slam_dunks => 5
-      },
+        },
         "Ben Gordon" => {
         :number => 8,
         :shoe => 15,
@@ -103,7 +102,7 @@ def game_hash
         :steals => 1,
         :blocks => 1,
         :slam_dunks => 0
-      },
+        },
         "Brendan Haywood" => {
         :number => 33,
         :shoe => 15,
@@ -119,24 +118,88 @@ def game_hash
   }
 end
 
-#-def good_practices
-  #-game_hash.each do |location, team_data|
-    #are you ABSOLUTELY SURE what 'location' and 'team data' are? use binding.pry to find out!
-    #-binding.pry
-      #-team_data.each do |attribute, data|
-        #are you ABSOLUTELY SURE what 'attribute' and 'team data' are? use binding.pry to find out!
-        #-binding.pry
-
-        #what is 'data' at each loop through out .each block? when will the following line of code work and when will it break?
-        #-data.each do |data_item|
-            #-binding.pry
-      #-end
-    #-end
-  #-end
-#-end
-
-#-good_practices
-
-def num_points_scored(player_name)
   
-end
+  def num_points_scored(player_name)
+    all_players[player_name][:points]
+  end 
+
+  def home_players
+    game_hash[:home][:players]
+  end
+
+  def away_players
+    away_players = game_hash[:away][:players]
+  end
+
+  def all_players
+    home_players.merge(away_players)
+  end
+ 
+  def shoe_size(player_name)
+    all_players[player_name][:shoe]
+  end
+
+  def home_team
+    game_hash[:home]
+  end
+  
+  def away_team
+    game_hash[:away]
+  end
+
+  def all_teams
+    [home_team, away_team]
+  end
+
+  def team_colors(team_name)
+    if team_name == game_hash[:home][:team_name]
+      return game_hash[:home][:colors]
+    else 
+      return game_hash[:away][:colors]
+    end
+  end
+
+  def team_names
+    game_hash.collect do |loc, team_data|
+      team_data[:team_name]
+    end
+  end
+
+  def player_numbers(team_name)
+    #returns player numbers in an array by team
+    charlotte_numbers = []
+    brooklyn_numbers = []
+    if team_name == away_team[:team_name]
+      away_players.each do |player_name, hash_of_stats|
+        player_name.each do |category, stat|
+          if category == :number
+            charlotte_numbers << stat
+          end
+        end
+      end
+      return charlotte_numbers
+    else
+      home_players.each do |player_name, hash_of_stats|
+        # binding.pry
+        player_name.each do |category, stat|
+          if category == :number
+            brooklyn_numbers << stat
+          end
+        end
+      end
+      return brooklyn_numbers
+    end
+  end
+
+  def player_stats(player_name)
+    #shows hash of players with their stats
+    all_players.fetch(player_name)
+  end
+
+  def big_shoe_rebounds
+    #returns rebounds for player with largest shoes
+    all_players.each do |player|
+      player.shoe_size
+    end
+  end
+
