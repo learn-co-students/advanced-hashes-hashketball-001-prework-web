@@ -220,3 +220,45 @@ def most_points_scored
   player_points_hash.max_by{|key, value| value}[0]
 end
 
+def winning_team
+  totals = { }
+  game_hash.each do |location, team_data|
+    team_data[:players].each do |player, stats|
+      if totals[team_data[:team_name]].nil?
+        totals[team_data[:team_name]] = stats[:points]
+      else
+        totals[team_data[:team_name]] += stats[:points]
+      end
+    end
+  end
+  totals.max_by{|key, value| value}[0]
+end
+
+
+def player_with_longest_name
+  longest_name = nil
+  longest_length = 0
+  game_hash.each do |location, team_data|
+    team_data[:players].each do |player, stats|
+      if player.length > longest_length
+        longest_name = player
+        longest_length = player.length
+      end
+    end
+  end
+  longest_name
+end
+
+def long_name_steals_a_ton?
+  most_steals = 0
+  player_with_most_steals = nil
+  game_hash.each do |location, team_data|
+    team_data[:players].each do |player, stats|
+      if stats[:steals] > most_steals
+        most_steals = stats[:steals] 
+        player_with_most_steals = player
+      end
+    end
+  end
+  player_with_longest_name == player_with_most_steals
+end
