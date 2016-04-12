@@ -126,6 +126,7 @@ end
 
 
 def winning_team
+  
   top_team = {}
   game_hash.values.each do |team_info|
     team_points = 0
