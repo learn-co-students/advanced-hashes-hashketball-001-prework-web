@@ -45,7 +45,6 @@ def num_points_scored(player_name)
 end
 
 
-
 def shoe_size(player_name)
 
   game_hash.values.each do |team_info|  
@@ -126,7 +125,7 @@ end
 
 
 def winning_team
-  
+
   top_team = {}
   game_hash.values.each do |team_info|
     team_points = 0
@@ -164,40 +163,5 @@ max_steals = longest.values.max
 longest[longest.key(max_steals)] == max_steals
   
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
