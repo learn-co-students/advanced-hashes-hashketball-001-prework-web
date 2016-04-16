@@ -117,19 +117,6 @@ def game_hash
     }
 end
 
-# Takes in an argument of a player's name
-# and returns the number of points scored for that player
-def num_points_scored(player_name)
-    game_hash.each do |origin, team|
-      stats = team[:players][player_name]
-      if stats # If not empty
-          return stats[:points]
-      end
-    end
-end
-
-# Takes in an argument of the team name
-# and returns an array of that team's colors
 def shoe_size(player_name)
     game_hash.each do |_, team|
         if team[:players][player_name]
@@ -138,54 +125,6 @@ def shoe_size(player_name)
     end
 end
 
-# Takes in an argument of the team name
-# and returns an array of that team's colors
-def team_colors(team_name)
-    result = []
-    game_hash.each do |team_origin, team_attribute|
-        if team_attribute[:team_name] == team_name
-            result << game_hash[team_origin][:colors]
-        end
-    end
-    result.flatten
-end
-
-# Operates on the game hash to return an array of the team names
-def team_names
-    array = []
-    game_hash.each do |team_origin, team|
-        array << team[:team_name]
-    end
-    array
-end
-
-# Takes in an argument of a team name
-# and returns an array of the jersey number's for that team
-def player_numbers(team_name)
-    result = []
-    game_hash.each do |origin, team|
-        team[:players].each do |name, stats| # Why doesn't it work if I switch lines 167 with 168?
-            if team[:team_name] == team_name
-                result << team[:players][name][:number]
-            end
-        end
-    end
-    return result
-end
-
-# Takes in an argument of a player's name
-# and returns a hash of that player's stats
-# Expected return value:
-# player_stats("Alan Anderson")
-# => { :number => 0,
-#      :shoe => 16,
-#      :points => 22,
-#      :rebounds => 12,
-#      :assists => 12,
-#      :steals => 3,
-#      :blocks => 1,
-#      :slam_dunks => 1
-#    }
 def player_stats(player_name)
     game_hash.each do |origin, team|
       stats = team[:players][player_name]
@@ -195,91 +134,38 @@ def player_stats(player_name)
     end
 end
 
-# Return the number of rebounds associated with the player
-# that has the largest shoe size
-# There should be a method that returns a list of player names
-# end
-
 def player_names(team_name)
     names = []
     game_hash.each do |origin, team|
         team[:players].each do |name, stats|
-            if team[:team_name] ==  team_name
-                names << name
-            end
+            names << name
         end
     end
     return names
 end
 
-def big_shoe_rebounds
-    largest_shoe = 0
-    rebounds = 0
-    player = ""
-    game_hash.each do |origin, team|
-        team[:players].each do |name, stats|
-            if largest_shoe < shoe_size(name)
-                largest_shoe = shoe_size(name)
-                player = name
-            end
-        end
-    end
-    return player_stats(player)[:rebounds]
-end
-
-# Which player has the most points
-def most_points_scored(team_name) #This results in the most points scored by someone in the whole game hash, not in each team
+def biggest_shoe_size_rebound(team_name)
     players = player_names(team_name)
-    most_points = 0
+    largest_shoe = 0
     name = ""
 
     players.each do |player|
-        if most_points < num_points_scored(player)
-            most_points = num_points_scored(player)
+        if largest_shoe < shoe_size(player)
+            largest_shoe = shoe_size(player)
             name = player
         end
     end
-    return name
+    puts player_stats(name)[:rebounds]
 end
 
-# # # Which team has the most points
-def total_points_scored(team_name)
-    players = player_names(team_name)
-    total_points = 0
-    name = ""
-
-    players.each do |player|
-        total_points = total_points + num_points_scored(player)
-    end
-    return total_points
-end
-
-def winning_team(team_name1, team_name2)
-    winner = ""
-    if total_points_scored(team_name1) < total_points_scored(team_name2)
-        winner = team_name2
+def big_shoe_rebounds(team_name1, team_name2)
+    most_rebounds = 0
+    if biggest_shoe_size_rebound(team_name1) < biggest_shoe_size_rebound(team_name2)
+        most_rebounds = biggest_shoe_size_rebound(team_name2)
     else
-        winner = team_name1
+        most_rebounds = biggest_shoe_size_rebound(team_name1)
     end
-    return winner
-end
-# #
-# # # Which player has the longest name
-def player_with_longest_name(team_name)
-    players = player_names(team_name)
-    length = 0
-    longest_name = ""
-    players.each do |player|
-        if length < player.length
-            length = player.length
-            longest_name = player
-        end
-    end
-    return longest_name
+    puts most_rebounds
 end
 
-# # # Returns true if the player with the longest name
-# # # had the most steals
-# # def long_name_steals_a_ton()
-# # end
-big_shoe_rebounds
+big_shoe_rebounds("Charlotte Hornets")
