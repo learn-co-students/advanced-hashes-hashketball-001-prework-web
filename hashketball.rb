@@ -296,7 +296,7 @@ def most_points_scored
           result.each do |player_name,stats|
             stats.each do |stat,number|
               if stat == :points && number > highest_score[1]
-            highest_score = [player_name,number]
+                  highest_score = [player_name,number]
               end
             end
           end
@@ -305,5 +305,81 @@ def most_points_scored
   end
 
   highest_score[0]
+
+end
+
+def winning_team
+
+  highest_score = 0
+  team = ""
+  temp_high = 0
+
+  game_hash.each do |side,side_hash|
+    side_hash.each do |info,result|
+      if result.is_a?(Hash)
+        temp_high = 0
+        result.each do |player_name,stats|
+          stats.each do |stat,number|
+            if stat == :points
+              temp_high += number
+            end
+          end
+        end
+        if temp_high > highest_score
+          highest_score = temp_high
+          team = game_hash[side][:team_name]
+        end
+
+      end
+    end
+  end
+
+  team
+
+end
+
+def player_with_longest_name
+
+  longest_player = ""
+
+  game_hash.each do |side,side_hash|
+      side_hash.each do |info,result|
+        if result.is_a?(Hash)
+          result.each do |player_name,stats|
+            longest_player = player_name if player_name.length > longest_player.length
+          end
+        end
+      end
+  end
+
+  longest_player
+
+end
+
+def most_steals
+
+  most_steals = ["player",0]
+
+  game_hash.each do |side,side_hash|
+      side_hash.each do |info,result|
+        if result.is_a?(Hash)
+          result.each do |player_name,stats|
+            stats.each do |stat,number|
+              if stat == :steals && number > most_steals[1]
+                  most_steals = [player_name,number]
+              end
+            end
+          end
+        end
+      end
+  end
+
+  most_steals[0]
+
+end
+
+def long_name_steals_a_ton?
+
+  return true if player_with_longest_name == most_steals
 
 end

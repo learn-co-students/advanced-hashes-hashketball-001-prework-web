@@ -80,7 +80,7 @@ stats = {
         :slam_dunks => 10
       },
       "DeSagna Diop" => {
-        :number => 12,
+        :number => 2,
         :shoe => 14,
         :points => 24,
         :rebounds => 12,
