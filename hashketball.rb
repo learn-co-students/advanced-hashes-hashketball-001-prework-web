@@ -111,108 +111,103 @@ end
 
 
 
-#puts game_hash[:away][:players]["Ben Gordon"][:points]
-
-
-def get_info(player, desired_key, desired_attribute)
-	game_hash.each do |location, team_data|
-			team_data.each do |attribute, key|
-				if attribute == desired_key 
-					game_hash[location][attribute].each do |guys|
-						guys.each do |final|
-							if final==player
-								return game_hash[location][attribute][final][desired_attribute]
-							end
-							 
-						end 
+def num_points_scored(player)
+	game_hash.each do |team, team_info|
+		team_info.each do |key, value|
+			if key == :players 
+				value.each do |player_final, stats|
+					if player_final==player
+						return stats[:points] 
 					end 
 				end 
-   			end
-	end
-end
-
-def num_points_scored(player)
-	get_info(player, :players, :points)
+			end 
+		end 
+	end 
 end
 
 
 
 def shoe_size(player)
-	get_info(player, :players, :shoe)
+	game_hash.each do |team, team_info|
+		team_info.each do |key, value|
+			if key == :players 
+				value.each do |player_final, stats|
+					if player_final==player
+						return stats[:shoe] 
+					end 
+				end 
+			end 
+		end 
+	end 	
 end
 
 
 
 def team_colors(team)
-	game_hash.each do |location, team_data|
-		team_data.each do |attribute, key|
-			if key == team 
-				return game_hash[location][:colors]
-			end 
-   		end
-	end
+	game_hash.each do |teams, teaminfo|
+		if teaminfo[:team_name]==team
+			return teaminfo[:colors]
+		end 
+	end 
 end 
 
 
 def team_names 
-	game_hash.collect do |team, attribute |
-	#binding.pry
-		game_hash[team][:team_name]
+	result=[]
+	game_hash.each do |location, teams| 
+		teams.each do |key, value|
+			if key== :team_name
+				result << value 
+			end 
+		end 
 	end 
-end 
-
-def player_numbers(team)
-	result =[]
-	game_hash.each do |location, team_data|
-		if team_data[:team_name]==team
-			team_data.each do |attribute, key|
-				if attribute == :players 
-					key.each do |data, final|
-						result <<  game_hash[location][attribute][data][:number]
-					end	 
-				end 
-   			end
-   		end 
-	end
 	result 
 end 
 
-def player_stats(player)
-	game_hash.each do |location, team_data|
-			team_data.each do |attribute, key|
-				if attribute == :players 
-					game_hash[location][attribute].each do |guys|
-						guys.each do |final|
-							if final==player
-								return game_hash[location][attribute][final]
-							end
-							 
-						end 
+def player_numbers(team)
+	result=[]
+	game_hash.each do |teams, teaminfo|
+		if teaminfo[:team_name]==team
+			teaminfo.each do |key, value|
+				if key == :players 
+					value.each do |player, playerinfo|
+						result << playerinfo[:number]
 					end 
 				end 
-   			end
-	end
-
-end 
-
-def big_shoe_find
-	big=0
-	result =""
-	game_hash.each do |location, team_data|
-		team_data.each do |attribute, key|
-			if attribute == :players 
-				key.each do |data, final|
-					if game_hash[location][attribute][data][:number] > big
-						big=game_hash[location][attribute][data][:number]
-						result =  data
-					end 
-				end	 
-			end    
+			end 
 		end 
-	end
+	end 
 	result
 end 
 
+def player_stats(player)
+	game_hash.each do |team, team_info|
+		team_info.each do |key, value|
+			if key == :players 
+				value.each do |player_final, stats|
+					if player_final==player
+						return stats
+					end 
+				end 
+			end 
+		end 
+	end 
+end 
+
 def big_shoe_rebounds
-	get_info(big_shoe_find, :players, :rebounds)
+	big_shoe=0
+	big_rebound=0
+	game_hash.each do |team, team_info|
+		team_info.each do |key, value|
+			if key == :players 
+				value.each do |player, stats|
+					if  big_shoe < stats[:shoe] 
+						big_shoe= stats[:shoe]
+						big_rebound=stats[:rebounds]
+					end 
+				end 
+			end 
+		end 
+	end	
+	big_rebound
 end 
