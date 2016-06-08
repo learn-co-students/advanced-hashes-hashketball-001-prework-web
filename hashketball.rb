@@ -151,11 +151,9 @@ end
 
 def team_names
   player_info_hash = game_hash
-  team_names = []
-  player_info_hash.each do |location, team_data|
-    team_names << team_data[:team_name]
+  player_info_hash.map do |location, team_data|
+    team_data[:team_name]
   end
-  team_names
 end
 
 
