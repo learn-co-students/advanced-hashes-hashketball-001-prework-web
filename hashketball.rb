@@ -192,27 +192,19 @@ def big_shoe_rebounds
     team_data.each do |data, player_info|
       if data == :players
         player_info.each do |name, stats|
-          stats.each do |type, number|
-              shoe_sizes << number if type == :shoe
-            end
+          stats.each do |type, player_number|
+            shoe_sizes << player_number if type == :shoe
           end
         end
+      end
     end
   end
   biggest_shoe = shoe_sizes.max
   player_info_hash.each do |location, team_data|
-    team_data.each do |data, player_info|
-      if data == :players
-        player_info.each do |name, stats|
-          stats.each do |type, number|
-            if number = biggest_shoe
-              stats.each do |type, number|
-                if type == :rebounds
-                  return number
-                end
-              end
-            end
-          end
+    team_data[:players].each do |name, stats|
+      stats.each do |type, player_number|
+        if player_number = biggest_shoe
+          return team_data[:players][name][:rebounds]
         end
       end
     end
