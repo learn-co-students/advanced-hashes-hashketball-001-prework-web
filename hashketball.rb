@@ -109,18 +109,14 @@ def game_hash
 	}
 end 
 
-
+	
 
 def num_points_scored(player)
 	game_hash.each do |team, team_info|
-		team_info.each do |key, value|
-			if key == :players 
-				value.each do |player_final, stats|
-					if player_final==player
-						return stats[:points] 
-					end 
-				end 
-			end 
+		team_info[:players].each do |member, stats|
+			 if member==player
+			 		return stats[:points]
+			 end 
 		end 
 	end 
 end
@@ -129,19 +125,13 @@ end
 
 def shoe_size(player)
 	game_hash.each do |team, team_info|
-		team_info.each do |key, value|
-			if key == :players 
-				value.each do |player_final, stats|
-					if player_final==player
-						return stats[:shoe] 
-					end 
-				end 
-			end 
+		team_info[:players].each do |member, stats|
+			 if member==player
+			 		return stats[:shoe]
+			 end 
 		end 
-	end 	
+	end 
 end
-
-
 
 def team_colors(team)
 	game_hash.each do |teams, teaminfo|
@@ -151,45 +141,27 @@ def team_colors(team)
 	end 
 end 
 
-
 def team_names 
-	result=[]
-	game_hash.each do |location, teams| 
-		teams.each do |key, value|
-			if key== :team_name
-				result << value 
-			end 
-		end 
-	end 
-	result 
+	game_hash.collect do |location, teams| 
+		teams[:team_name]
+	end  
 end 
 
+
 def player_numbers(team)
-	result=[]
-	game_hash.each do |teams, teaminfo|
-		if teaminfo[:team_name]==team
-			teaminfo.each do |key, value|
-				if key == :players 
-					value.each do |player, playerinfo|
-						result << playerinfo[:number]
-					end 
-				end 
+	game_hash.each_with_object([]) do |(teams, team_info), result|
+		if team == team_info[:team_name]	
+			team_info[:players].each do |key, value|
+					result << value[:number] 
 			end 
-		end 
+		end  	 
 	end 
-	result
 end 
 
 def player_stats(player)
 	game_hash.each do |team, team_info|
-		team_info.each do |key, value|
-			if key == :players 
-				value.each do |player_final, stats|
-					if player_final==player
-						return stats
-					end 
-				end 
-			end 
+		team_info[:players].each do |key, stats| 
+			return stats if key==player 
 		end 
 	end 
 end 
@@ -197,17 +169,55 @@ end
 def big_shoe_rebounds
 	big_shoe=0
 	big_rebound=0
-	game_hash.each do |team, team_info|
-		team_info.each do |key, value|
-			if key == :players 
-				value.each do |player, stats|
-					if  big_shoe < stats[:shoe] 
-						big_shoe= stats[:shoe]
-						big_rebound=stats[:rebounds]
-					end 
-				end 
+	game_hash.values.each do |team_info|
+		team_info[:players].values.each do |value|
+			if  big_shoe < value[:shoe] 
+				big_shoe= value[:shoe]
+				big_rebound = value[:rebounds]
 			end 
 		end 
 	end	
 	big_rebound
 end 
+
+
+def most_points_scored
+	most_points=0
+	player=""
+	game_hash.values.each do |team_info|
+		team_info[:players].each do |person, value|
+			if  most_points < value[:points] 
+				most_points= value[:points]
+				player = person
+			end 
+		end 
+	end	
+	player
+end 
+
+def winning_team
+	brooklyn_nets=0
+	charlotte_hornets=0
+	game_hash.values.each do |team_info|
+		if team_info[:team_name]=="Brooklyn Nets"
+			team_info[:players].values.each do |value|
+				brooklyn_nets+=value[:points]
+			end 
+		else 
+			team_info[:players].values.each do |value|
+				charlotte_hornets+=value[:points]
+			end 
+		end
+	end 
+		if brooklyn_nets>charlotte_hornets
+			return  "Brooklyn Nets"
+		else 
+			return "Charlotte Hornets"
+		end 
+end 
+
+def player_with_longest_name
+
+
+end 
+ 
