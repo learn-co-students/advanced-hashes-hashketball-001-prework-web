@@ -109,8 +109,93 @@ def game_hash
 	}
 end 
 
-	
+# A. Pure Problem Solving 1. Restate the problem 2. Break down the problem into smaller 
+# subproblems write a comment a. Make an analogy to real life b. Solve the problem as if you did not have computer
 
+# B. Translating into code Think about the data and structure that you want
+
+# reject information we don't need
+# coerce into the data structure we want Try to remove the abstraction by making a concrete example
+# Hashketball
+
+# find the player with the biggest shoe size
+# most rebounds with the player of the biggest shoe size
+# list -> array You want a list of players then you want that player's attributes Then get the shoe size
+# def teams
+#   #return a list of the teams
+#   #[game_hash[:home][:team_name], game_hash[:away][:team_name]]
+#   game_hash.values.collect do |teams| 
+# 		teams[:team_name]
+# 	end  
+# end
+
+def players
+   #Return a list of the players
+   players = game_hash.collect do |location, team_info|
+   	team_info[:players].keys.flatten
+   end 
+end
+
+# def team()
+#  # Given a name, find a player
+# end
+
+# def player
+#   #Given a name, find a team
+# end
+
+
+# def num_points_scored(player)
+# 	#we want a hash of the players to see what player has the points. 
+# 	#we need a list of the players to find the players we need
+# 	player_hash = game_hash.each_with_object({}) do |(team, team_info), result|
+# 		team_info.each do |attribute, attribute_info|
+# 			if attribute==:players
+# 				attribute_info.each do |player, stats|
+# 					result[player]=stats
+# 				end 
+# 			end 
+# 		end 
+# 	end 
+# 	#now we want to look up the points for the player 
+# 	player_hash[player][:points]
+# end 
+
+
+# def shoe_size(player)
+# 	#we want a hash of the players to see what player has the points. 
+# 	#we need a list of the players to find the players we need
+# 	player_hash = game_hash.each_with_object({}) do |(team, team_info), result|
+# 		team_info.each do |attribute, attribute_info|
+# 			if attribute==:players
+# 				attribute_info.each do |player, stats|
+# 					result[player]=stats
+# 				end 
+# 			end 
+# 		end 
+# 	end 
+# 	#now we want to look up the shoes for the player 
+# 	player_hash[player][:shoes]
+# end 	
+
+
+
+# def team_colors(team) 
+# 	#hard coding
+# 	#hash= {game_hash[:home][:team_name] => game_hash[:home][:colors], game_hash[:away][:team_name] => game_hash[:away][:colors]}
+# 	#iteration
+# 	teams_with_colors = game_hash.each_with_object ({}) do  |(location, team_info), result|
+# 		result[game_hash[location][:team_name]] = game_hash[location][:colors]
+# 	end
+# 	teams_with_colors[team]
+# end
+
+# def team_names 
+# 	game_hash.values.collect do |teams| 
+# 		teams[:team_name]
+# 	end  
+# end 
+#
 def num_points_scored(player)
 	game_hash.each do |team, team_info|
 		team_info[:players].each do |member, stats|
@@ -195,6 +280,16 @@ def most_points_scored
 	player
 end 
 
+def sum_points
+	game_hash.each_with_object([]) do |(teams, team_info), result|
+		if team == team_info[:team_name]	
+			team_info[:players].each do |key, value|
+				result << value[:number] 
+			end 
+		end  	 
+	end 
+end 
+
 def winning_team
 	brooklyn_nets=0
 	charlotte_hornets=0
@@ -217,7 +312,25 @@ def winning_team
 end 
 
 def player_with_longest_name
-
-
+	players.flatten.max_by {|player| player.length}
 end 
- 
+
+def long_name_steals_a_ton? 
+	steals_big=0
+	player_big=0
+	game_hash.values.each do |team_info|
+		team_info[:players].each do |player, value|
+			if  steals_big < value[:steals] 
+				steals_big= value[:shoe]
+				player_big = player
+			end 
+		end 
+	end	
+	if player_big==player_with_longest_name
+		return true 
+	else 
+		return false 
+	end 
+end
+
+
