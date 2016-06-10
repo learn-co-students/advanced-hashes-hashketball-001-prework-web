@@ -48,11 +48,9 @@ def team_colors(team_name)
 end
 
 def team_names
-  team_names = []
-  game_hash.each do |location, team_data|
-    team_names << team_data[:team_name]
+  game_hash.map do |location, team_data|
+    team_data[:team_name]
   end
-  return team_names
 end
 
 def player_numbers(team_name)
@@ -154,5 +152,3 @@ def long_name_steals_a_ton?
     return false
   end
 end
-
-long_name_steals_a_ton?
