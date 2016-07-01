@@ -162,19 +162,71 @@ def player_stats(name)
 end
 
 def big_shoe_rebounds
-  players_array = game_hash.collect {|location, h1| game_hash[location][:players].keys}
   shoe_array = game_hash.collect do |location, h1|
     game_hash[location][:players].collect {|player,v1| game_hash[location][:players][player][:shoe]}
   end
 
-  biggest_shoe_size = shoe_array.flatten.index(shoe_array.flatten.max)
-
   rebounds_array = game_hash.collect do |location, h1|
     game_hash[location][:players].collect {|player,v1| game_hash[location][:players][player][:rebounds]}
   end
-  rebounds_array.flatten[biggest_shoe_size]
+
+  biggest_shoe_size_index = shoe_array.flatten.index(shoe_array.flatten.max)
+
+  rebounds_array.flatten[biggest_shoe_size_index]
+end
+
+def most_points_scored
+  players_array = game_hash.collect {|location, h1| game_hash[location][:players].keys}
+
+  points_array = game_hash.collect do |location, h1|
+    game_hash[location][:players].collect {|player,v1| game_hash[location][:players][player][:points]}
+  end
+
+  most_points_index = points_array.flatten.index(points_array.flatten.max)
+
+  players_array.flatten[most_points_index]
+
+end
+
+def winning_team
+  points_array = game_hash.collect do |location, h1|
+    game_hash[location][:players].collect {|player,v1| game_hash[location][:players][player][:points]}
+  end
+
+  home_points = points_array[0].inject(0){|sum,x| sum + x }
+  away_points = points_array[1].inject(0){|sum,x| sum + x }
+
+  if home_points > away_points
+    game_hash[:home][:team_name]
+  else
+    game_hash[:away][:team_name]
+  end
+
+  #binding.pry
 end
 
 
+def player_with_longest_name
+  players_array = game_hash.collect{|location, h1| game_hash[location][:players].keys}.flatten
+  name_length_array = players_array.collect{|name| name.length}
+  longest_name_index = name_length_array.index(name_length_array.max)
+  players_array[longest_name_index]
 
+end
+
+def player_with_most_steals
+  steals_array = game_hash.collect {|location, h1|
+    game_hash[location][:players].collect{|player,v1| game_hash[location][:players][player][:steals]}
+  }.flatten
+
+  players_array = game_hash.collect{|location, h1| game_hash[location][:players].keys}.flatten
+
+  higest_steals_index = steals_array.index(steals_array.max)
+
+  players_array[higest_steals_index]
+end
+
+def long_name_steals_a_ton?
+  player_with_most_steals == player_with_longest_name
+end
 
