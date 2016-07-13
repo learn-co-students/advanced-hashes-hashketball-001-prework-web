@@ -55,107 +55,152 @@ def good_practices
   end
 end
 
-def num_points_scored(player_name)
-  correct_level = {}
-  game_hash.each do |team, value|
-    value.each do |item, data|
-      if item == :players
-        data.each do |player, stats|
-          if player == player_name
-            correct_level = stats
-          end
-        end
-      end
-    end
-  end
-  if correct_level == {}
-    puts "Player #{player_name} not found!"
-  else
-    correct_level[:points]
-  end
+
+###REFACTORING CODE HERE
+def fetch_all_players_in_a_game  #Returns a merged array of only player data
+  #WARNING... This method assumes that there are no players with the exact same name!
+  all_players = game_hash.collect {|_, data| data[:players]}
+  all_players[0].merge(all_players[1])
 end
 
-def shoe_size(player_name)
-  correct_level = {}
-  game_hash.each do |team, value|
-    value.each do |item, data|
-      if item == :players
-        data.each do |player, stats|
-          if player == player_name
-            correct_level = stats
-          end
-        end
-      end
-    end
-  end
-  if correct_level == {}
-    puts "Player #{player_name} not found!"
-  else
-    correct_level[:shoe]
-  end
-end
-
-def team_colors(team_name)
-  colors = []
-  game_hash.each do |team, value|
-    if value[:team_name] == team_name
-      colors = value[:colors]
-    end
-  end
-  if colors == []
-    puts "Unknown team!"
-  else
-    colors
-  end
-end
-
-def team_names
-  team_names = []
-  game_hash.each do |team, value|
-    team_names << value[:team_name]
-  end
-  team_names
-end
-
-def player_numbers(team_name)
-  jerseys = []
-  game_hash.each do |team, value|
-    if value[:team_name] == team_name
-      value.each do |item, data|
-        if item == :players
-          data.each do |player, stats|
-            jerseys << stats[:number]
-          end
-        end
-      end
-    end
-  end
-  if jerseys == []
-    puts "Unknown team!"
-  else
-    jerseys
-  end
+def fetch_all_players_in_a_team(team_name)
+    game_hash.collect do |_, data|
+    data[:players] if data[:team_name] == team_name
+  end.compact[0]
 end
 
 def player_stats(player_name)
-  correct_level = {}
-  game_hash.each do |team, value|
-    value.each do |item, data|
-      if item == :players
-        data.each do |player, stats|
-          if player == player_name
-            correct_level = stats
-          end
-        end
-      end
-    end
-  end
-  if correct_level == {}
-    puts "Player #{player_name} not found!"
-  else
-    correct_level
-  end
+   fetch_all_players_in_a_game[player_name]
 end
+
+def num_points_scored(player_name)
+   player_stats(player_name)[:points]
+end
+
+def shoe_size(player_name)
+  player_stats(player_name)[:shoe]
+end
+
+def team_colors(team_name)
+  game_hash.collect do |_, data|
+    data[:colors] if data[:team_name] == team_name
+  end.compact!.flatten!
+end
+
+def team_names
+  game_hash.collect {|_, data| data[:team_name]}
+end
+
+ def player_numbers(team_name)
+   fetch_all_players_in_a_team(team_name).collect {|_, stats| stats[:number]}
+ end
+
+
+###FIRST SOLUTIONS HERE
+
+# def num_points_scored(player_name)
+#   correct_level = {}
+#   game_hash.each do |team, value|
+#     value.each do |item, data|
+#       if item == :players
+#         data.each do |player, stats|
+#           if player == player_name
+#             correct_level = stats
+#           end
+#         end
+#       end
+#     end
+#   end
+#   if correct_level == {}
+#     puts "Player #{player_name} not found!"
+#   else
+#     correct_level[:points]
+#   end
+# end
+
+
+# def shoe_size(player_name)
+#   correct_level = {}
+#   game_hash["players"]
+#   game_hash.each do |team, value|
+#     value.each do |item, data|
+#       if item == :players
+#         data.each do |player, stats|
+#           if player == player_name
+#             correct_level = stats
+#           end
+#         end
+#       end
+#     end
+#   end
+#   if correct_level == {}
+#     puts "Player #{player_name} not found!"
+#   else
+#     correct_level[:shoe]
+#   end
+# end
+
+# def team_colors(team_name)
+#   colors = []
+#   game_hash.each do |team, value|
+#     if value[:team_name] == team_name
+#       colors = value[:colors]
+#     end
+#   end
+#   if colors == []
+#     puts "Unknown team!"
+#   else
+#     colors
+#   end
+# end
+
+# def team_names
+#   team_names = []
+#   game_hash.each do |team, value|
+#     team_names << value[:team_name]
+#   end
+#   team_names
+# end
+
+# def player_numbers(team_name)
+#   jerseys = []
+#   game_hash.each do |team, value|
+#     if value[:team_name] == team_name
+#       value.each do |item, data|
+#         if item == :players
+#           data.each do |player, stats|
+#             jerseys << stats[:number]
+#           end
+#         end
+#       end
+#     end
+#   end
+#   if jerseys == []
+#     puts "Unknown team!"
+#   else
+#     jerseys
+#   end
+# end
+
+# def player_stats(player_name)
+#   correct_level = {}
+#   game_hash.each do |team, value|
+#     value.each do |item, data|
+#       if item == :players
+#         data.each do |player, stats|
+#           if player == player_name
+#             correct_level = stats
+#           end
+#         end
+#       end
+#     end
+#   end
+#   if correct_level == {}
+#     puts "Player #{player_name} not found!"
+#   else
+#     correct_level
+#   end
+# end
 
 def largest_shoe_size
   biggest_shoe = -1
