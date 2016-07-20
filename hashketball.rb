@@ -163,8 +163,8 @@ def team_names
 	}
 end
 
-# Create an array with 2 elements, itorate through the players and compare their 
-# states to the values in the array. return the 2nd value from the array
+# Create an array with 2 elements, iterate through the players and compare their 
+# stats to the values in the array. return the 2nd value from the array
 
 def big_shoe_rebounds  
    max_shoe_rebounds = [0,0]
