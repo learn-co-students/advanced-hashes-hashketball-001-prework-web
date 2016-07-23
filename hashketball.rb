@@ -526,7 +526,7 @@ def big_shoe_rebounds
 
 
 
-              if stats[:shoe] == 16
+              if stats[:shoe] == lrg
 
                 return stats[:rebounds]
 
