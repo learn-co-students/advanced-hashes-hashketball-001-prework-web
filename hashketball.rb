@@ -1,6 +1,4 @@
-# Write your code here!
 
-require "pry"
 
 def game_hash
 
@@ -157,7 +155,7 @@ end
 
 #this way (below) is way cleaner than the "official" way in the solutiom? 
 #I have coded both just to make sure I understand the logic of the "solution version"
-#ah, I guess if there were many options for home/away, this method becomes not feasible 
+#ah, I guess if there were many options for home/away, this method would not be feasible 
 
 def num_points_scored_alt(name)
   if game_hash[:home][:players][name] != nil
@@ -168,6 +166,9 @@ def num_points_scored_alt(name)
   puts "enter a valid name, yo!"
   end
 end
+
+#^ tip was fetch
+#http://ruby-doc.org/core-2.2.0/Hash.html#method-i-fetch
 
 def num_points_scored(name)
   game_hash.each do |location, data|
@@ -293,6 +294,70 @@ shoe_hash = {}
     end
   end
 end
+
+
+def most_points_scored
+points_hash = {}
+  game_hash.each do |k, v|
+    game_hash[k][:players].each do |name, data|
+      points_hash[name] = game_hash[k][:players][name][:points]
+    end
+  end
+  x = points_hash.max_by {|k,v| v}
+  x[0]
+end
+
+def winning_team
+  points_hash = {}
+  game_hash.each do |team_place, v|
+    game_hash[team_place][:players].each do |name, data|
+      points_hash[team_place] = 0
+      points_hash[team_place] += game_hash[team_place][:players][name][:points]
+    end
+  end
+  if points_hash[:home] >= points_hash[:away]
+    game_hash[:home][:team_name]
+  elsif points_hash[:home] <= points_hash[:away]
+    game_hash[:away][:team_name]
+  else
+    puts "They scored the same amount of points!"
+  end
+end
+
+def player_with_longest_name
+longest_name = ""
+  game_hash.each do |team_place, v|
+    game_hash[team_place][:players].each do |name, data|
+      if name.delete(' ').size > longest_name.size
+        longest_name = name
+      end
+    end
+  end
+longest_name
+end
+
+def long_name_steals_a_ton?
+longest_name = ""
+  game_hash.each do |team_place, v|
+    game_hash[team_place][:players].each do |name, data|
+      if name.delete(' ').size > longest_name.size
+        longest_name = name
+      end
+    end
+  end
+longest_name
+
+most_steals = ["", 0]
+  game_hash.each do |team_place, v|
+    game_hash[team_place][:players].each do |name, data|
+      if game_hash[team_place][:players][name][:steals] > most_steals[1]
+        most_steals = [name, game_hash[team_place][:players][name][:steals]]
+      end
+    end
+  end
+  longest_name == most_steals[0]
+end
+
 
 
 
