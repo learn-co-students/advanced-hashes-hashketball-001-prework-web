@@ -66,8 +66,8 @@ def game_hash
 
 			},
 		away: {
-			team_name: "team name",
-			colors: [],
+			team_name: "Charlotte Hornets",
+			colors: ["Turqouise", "Purple"],
 			players: {
 				"Jeff Adrien" => {
 					number: 4,
@@ -130,48 +130,65 @@ def game_hash
 
 end
 
-
-def find_player(name)
-	game_hash.each do |team, team_data_types|
-		team_data_types.each do |team_data_types, team_data|
-			if team_data_types == :players
-				team_data.each do |player_name, player_data|
-					if player_name == name
-						player_data
-					end
-				end
-			end
-		end
-	end
-
-
+def game_hash_values
+	game_hash.values
+	
 end
+
+
+def get_players_data(hash)
+	game_hash.values.flatten.map do |team|
+		team[:players]
+	end
+end
+
+def players_data
+	get_players_data(game_hash)
+	
+end
+
+players_data
+
+
+#this is stupid messy because i tried so many things to figure out what was garbage. the upshot is, all the values are correct -- points[0] ends up being the correct number, etc -- but the return value is nil, and i don't know why
 
 
 def num_points_scored(name)
 	
-	game_hash.each do |team, team_data_types|
+	points = []
 
-		team_data_types.each do |team_data_types, team_data|
+	players_data_array = get_players_data(game_hash)
 
-			if team_data_types == :players
+	player_hash = players_data_array[0].merge(players_data_array[1])
 
-				team_data.each do |player_name, player_data|
-
-						if player_name == name
-
-
-
-							player_data[:points]	
-binding.pry
-
-						end		
-				end		
-			end
-		end		
-  end
-  
+	player_hash.each do |player_name, player_stats|
+		if player_name == name
+			player_hash[name][:points]
+			binding.pry
+			points << player_hash[name][:points]
+			binding.pry
+		end
+	end
+	points[0]
+	binding.pry
 end
+
+
+
+
+
+#	players_data_array.each do |player_hash|
+#		player_hash.each do |player_name, stats|
+#		
+#			if player_name == name
+#			
+#				players_data_array[player_hash][player_name][:points]
+				
+#			end
+#		end
+#	end
+#	players_data_array[player_hash][player_name][:points]	
+#end
 
 
 
