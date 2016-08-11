@@ -67,7 +67,7 @@ def game_hash
 			},
 		away: {
 			team_name: "Charlotte Hornets",
-			colors: ["Turqouise", "Purple"],
+			colors: ["Turquoise", "Purple"],
 			players: {
 				"Jeff Adrien" => {
 					number: 4,
@@ -80,7 +80,7 @@ def game_hash
 					slam_dunks: 2
 				},
 
-				"Bismack Biyombo" => {
+				"Bismak Biyombo" => {
 					number: 0,
 					shoe: 16,
 					points: 12,
@@ -91,7 +91,7 @@ def game_hash
 					slam_dunks: 10
 				},
 
-				"Desagna Diop" => {
+				"DeSagna Diop" => {
 					number: 2,
 					shoe: 14,
 					points: 24,
@@ -136,44 +136,100 @@ def game_hash_values
 end
 
 
-def get_players_data(hash)
-	game_hash.values.flatten.map do |team|
+def get_players_data
+	game_hash.values.map do |team|
 		team[:players]
 	end
 end
 
-def players_data
-	get_players_data(game_hash)
+
+def player_data(name)
+	players_array = get_players_data
+	players_hash = players_array[0].merge(players_array[1])
+	return players_hash[name]
 	
 end
 
-players_data
-
-
-#this is stupid messy because i tried so many things to figure out what was garbage. the upshot is, all the values are correct -- points[0] ends up being the correct number, etc -- but the return value is nil, and i don't know why
 
 
 def num_points_scored(name)
+	name_data = player_data(name)
+	return name_data[:points]
 	
-	points = []
+end
 
-	players_data_array = get_players_data(game_hash)
+def shoe_size(name)
+	name_data = player_data(name)
+	return name_data[:shoe]
 
-	player_hash = players_data_array[0].merge(players_data_array[1])
-
-	player_hash.each do |player_name, player_stats|
-		if player_name == name
-			player_hash[name][:points]
-			binding.pry
-			points << player_hash[name][:points]
-			binding.pry
-		end
-	end
-	points[0]
-	binding.pry
 end
 
 
+def teams_data
+	game_hash.values
+end
+
+
+
+def team_colors(team_name)
+		colors = []
+		teams_data.each do |team|
+			if team[:team_name] == team_name
+				colors = team[:colors]
+			end
+		end
+	return colors
+		
+end
+
+def team_names
+	[teams_data[0][:team_name], teams_data[1][:team_name]]
+end
+
+
+def get_team_players(team_name)
+	teams_data.each do |team|
+		if team[:team_name] == team_name
+		
+		end
+	end	
+end
+
+def player_numbers(team_name)
+	player_numbers = []
+	teams_data.each do |team|
+		if team[:team_name] == team_name
+			players = team[:players]
+		
+			players.each do |player, player_stats|
+				player_numbers << player_stats[:number]
+				
+			end
+		end
+	end
+	return player_numbers
+	
+end
+
+def player_stats(name)
+	player_data(name)
+	
+end
+
+def big_shoe_rebounds
+	shoe_hash = {}
+	players_array = get_players_data
+	players_hash = players_array[0].merge(players_array[1])
+	players_hash.each do |name, stat_hash|
+		shoe_hash[name] = stat_hash[:shoe]
+	end
+	binding.pry
+	big_shoe = shoe_hash.values.sort.pop
+	big_name = shoe_hash.key(big_shoe)
+	return players_hash[big_name][:rebounds]
+end
+
+#make a new array of shoe sizes, sort it, pop(?) the biggest one off the end, then use key ... first make a new hash of names and shoe sizes, then use that to make the array of shoe sizes, then use that to get the name. then use player_stats to get get the rebounds
 
 
 
