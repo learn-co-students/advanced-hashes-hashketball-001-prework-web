@@ -45,127 +45,107 @@ end
 good_practices
 
 def num_points_scored(player_name)
-#return number of points scored by that player
-  game_hash.each do |location, team_data|
-    #binding.pry
-    #this gives home/away, then the hash info after that 
-    team_data.each do |attribute, data|
-      #binding.pry
+  game_hash.each do |location, info|
+    info.each do |attribute, stats|
       if attribute == :players
-        data.each do |name, info|
+        stats.each do |name, information|
           if name == player_name
             return game_hash[location][:players][player_name][:points]
           end  
-        end  
-      end  
-    end    
-  end     
-end
-
-def shoe_size(player_name)
-  game_hash.each do |location, team_data|
-    team_data.each do |attribute, data|
-      if attribute == :players
-        data.each do |name, info|
-          if name == player_name
-            return game_hash[location][:players][player_name][:shoe]
-          end  
-        end  
-      end  
-    end    
-  end     
-end
-
-
-def team_colors(team_name)
-  game_hash.each do |location, team_data|
-    team_data.each do |attribute, data|
-      if data == team_name
-        return game_hash[location][:colors]
-      end  
-    end  
-  end      
-end
-
-def team_names 
-  team_names = []
-  game_hash.each do |location, team_data|
-    team_names << game_hash[location][:team_name]
-  end
-  team_names  
-end
-
-def player_numbers(team_name) 
-  numbers = []
-   game_hash.each do |place, team|
-     if team[:team_name] == team_name
-       team.each do |attribute, data|
-         if attribute == :players
-           data.each do |name, data|
-             numbers << data[:number]
-           end
-         end
-       end
-     end
-   end
-   numbers     
-end
-
-
-def player_stats(player_name)
-  game_hash.each do |location, team_data|
-    team_data.each do |attribute, data|
-      if attribute == :players
-        data.each do |name, info|
-          if name == player_name
-            return game_hash[location][:players][player_name]
-          end
-        end  
+        end     
       end
     end
   end      
+end 
+
+def shoe_size(player_name)
+  game_hash.each do |location, info|
+    info.each do |attribute, stats|
+      if attribute == :players
+        stats.each do |name, statistics|
+          if name == player_name
+            return game_hash[location][:players][player_name][:shoe]
+          end
+        end
+      end
+    end
+  end
+end
+
+def team_colors(team_name)
+  game_hash.each do |location, info|
+    info.each do |attribute, stats|
+      if stats == team_name
+        return game_hash[location][:colors]
+      end
+    end
+  end
+end
+
+def team_names
+  team_names = []
+  game_hash.each do |location, info|
+    info.each do |attribute, stats|
+      if attribute == :team_name
+        team_names << stats
+      end
+    end
+  end
+  team_names
+end
+
+def player_numbers(team_name)
+  numbers = []
+  game_hash.each do |location, info|
+    if game_hash[location][:team_name] == team_name
+      info.each do |attribute, stats|
+        if attribute == :players
+          stats.each do |name, information|
+            numbers << information[:number]
+          end  
+        end
+      end
+    end
+  end
+  numbers
+end
+
+def player_stats(player_name)
+  game_hash.each do |location, info|
+    info.each do |attribute, stats|
+      if attribute == :players
+        stats.each do |name, statistics|
+          if name == player_name
+             return statistics
+          end
+        end
+      end
+    end
+  end           
 end
 
 def big_shoe_rebounds
-  #return number of rebounds for player with biggest shoe size
-  shoe_size = 0
-  biggest_shoe_owner = ""
-  rebound_number = 0
-  shoes_size = []
-    game_hash.each do |location, team_data|
-      team_data.each do |attribute, data|
-        if attribute == :players
-          data.each do |name, info|
-            shoes_size << game_hash[location][:players][name][:shoe] 
-            shoe_size == shoes_size.max
-            biggest_shoe_owner = name
-            rebound_number = info[:rebounds]
+  biggest_shoe_size = 0
+  player = ""
+  game_hash.each do |location, info|
+    info.each do |attribute, stats|
+      if attribute == :players
+        stats.each do |name, information| 
+          information.each do |descriptor, number|
+            if descriptor == :shoe
+              if number > biggest_shoe_size
+                biggest_shoe_size = number
+                player =  name
+              end
+            end
           end
-        
+          return game_hash[location][:players][player][:rebounds]
         end
       end
-    end          
-    rebound_number
-end
-
-#the below method did not pass!
-def most_points_scored
-  points_scored = 0
-  player = ""
-  points_scored_array = []
-  game_hash.each do |location, team_data|
-    team_data[:players].each do |name, info|  
-          points_scored_array << game_hash[location][:players][name][:points]
-          points_scored = points_scored_array.max
-          player = name
-          # the above line is where things go wonky. Not sure how to fix. :(
-        
     end
-  end     
-  player
+  end
+  
 end
-#the most_points_scored array didn't work
-
 
 
 
