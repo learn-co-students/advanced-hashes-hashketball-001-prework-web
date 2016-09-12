@@ -104,3 +104,92 @@ def big_shoe_rebounds
   end
 end
 
+# def most_points_scored
+#   arr = []
+#   game_hash.each do |location, team_data|
+#     team_data[:players].each do |name, stats|
+#       arr << stats[:points]
+#     end
+#     mostpoints = arr.max
+#     team_data[:players].each do |name, stats|
+#       if stats[:points] == mostpoints
+#         return name
+#       end
+#     end
+#   end
+# end
+
+def most_points_scored
+  points = []
+  game_hash[:home][:players].each do |name, stats|
+    points << stats[:points]
+  end
+  game_hash[:away][:players].each do |name, stats|
+    points << stats[:points]
+  end
+  mostpoints = points.max
+  game_hash.each do |location, team_data|
+    team_data[:players].each do |name, stats|
+      if stats[:points] == mostpoints
+        return name
+      end
+    end
+  end
+end
+
+def winning_team
+  home = []
+  away = []
+  game_hash[:home][:players].each do |name, stats|
+    home << stats[:points]
+  end
+  game_hash[:away][:players].each do |name, stats|
+    away << stats[:points]
+  end
+  homepoints = home.inject(0, :+)
+  awaypoints = away.inject(0, :+)
+  if homepoints > awaypoints 
+    return game_hash[:home][:team_name]
+  else
+    return game_hash[:away][:team_name]
+  end
+end
+
+def player_with_longest_name
+  arr = []
+  game_hash.each do |location, team_data|
+    team_data[:players].each do |name, stats|
+      arr << name.length
+    end
+  end
+  longest = arr.max
+  game_hash.each do |location, team_data|
+    team_data[:players].each do |name, stats|
+      if longest == name.length
+        return name
+      end
+    end
+  end
+end
+
+def long_name_steals_a_ton?
+  arr = []
+  game_hash.each do |location, team_data|
+    team_data[:players].each do |name, stats|
+      arr << stats[:steals]
+    end
+  end
+    moststeals = arr.max
+    game_hash.each do |location, team_data|
+      team_data[:players].each do |name, stats|
+      if moststeals == stats[:steals]
+        name = name
+      end
+      if name == player_with_longest_name 
+        return true
+      else false
+      end
+    end
+  end
+end
+
