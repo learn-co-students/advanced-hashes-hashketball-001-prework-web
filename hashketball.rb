@@ -208,18 +208,21 @@ def player_numbers(str)
  	stats
  end
 
- def big_shoe_rebouds
+ def big_shoe_rebounds
  	biggest_shoe = 0
  	rebounds = 12
  	game_hash.each do |location, team_details|
- 		location.each do |team_attribute, attribute_detail|
+ 		team_details.each do |team_attribute, attribute_detail|
  			if team_attribute == :players
  				attribute_detail.each do |name, stats|
- 					if stats[:shoe] > biggest_shoe
+ 					if stats[:shoe].to_i > biggest_shoe
  						stats[:rebounds] = rebounds
  					end
  				end
  			end
  		end
  	end
+  rebounds
  end
+
+big_shoe_rebounds
