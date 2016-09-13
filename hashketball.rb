@@ -216,6 +216,7 @@ def player_numbers(str)
  			if team_attribute == :players
  				attribute_detail.each do |name, stats|
  					if stats[:shoe].to_i > biggest_shoe
+            biggest_shoe = stats[:shoe].to_i
  						stats[:rebounds] = rebounds
  					end
  				end
