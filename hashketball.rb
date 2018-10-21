@@ -121,6 +121,14 @@ end
 
 def num_points_scored(player_name)
 
+  game_hash.each do |team, team_data|
+    team_data[:players].each do |player|
+      if player[:player_name] == player_name
+        player[:points]
+      end
+    end
+  end
+
   # SOLUTION 1 - naive
   # some_hash.each do |key, value|
   # game_hash.each do |team, team_data|
@@ -157,4 +165,69 @@ def num_points_scored(player_name)
   all_players.each do |player|
     return player[:points] if player[:player_name] == player_name
   end
+end
+
+def shoe_size(player_name)
+  game_hash.each do |team, team_data|
+    team_data[:players].each do |player|
+    if player[:player_name] == player_name
+      player[:shoe]
+    end
+  end
+end
+
+  all_players = game_hash.values.collect do |team|
+    team[:players]
+  end.flatten
+
+  # find the player whose name matches the argument 'player_name'
+  # return that player's shoe size
+  all_players.each do |player|
+    return player[:shoe] if player[:player_name] == player_name
+  end
+end
+
+def team_colors(team_name)
+  game_hash.each do |team, team_data|
+      if team_data[:team_name] == team_name
+        return team_data[:colors]
+      end
+    end
+  end
+
+def team_names
+  game_hash.map {|team, team_names| team_names[:team_name]}
+end
+
+def player_numbers(team_name)
+  game_hash.each do |team, team_data|
+      if team_data[:team_name] == team_name
+        return team_data[:players].map {|player| player[:number]}
+      end
+    end
+  end
+
+  def player_stats(player_name)
+    game_hash.each do |team, team_data|
+      team_data[:players].each do |player|
+        if player[:player_name] == player_name
+          return player.delete_if { |stat, value| [:player_name].include?(stat)}
+        end
+      end
+    end
+  end
+
+def big_shoe_rebounds
+  biggest = 0
+  rebounds = 0
+  game_hash.each do |team, team_data|
+    team_data[:players].each do |player|
+      size = player[:shoe]
+      if size > biggest
+        biggest = size
+        rebounds = player[:rebounds]
+      end
+    end
+  end
+  rebounds
 end
