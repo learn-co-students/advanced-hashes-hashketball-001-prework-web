@@ -152,8 +152,9 @@ def player_numbers(team_name)
   array = []
   game_hash.collect do |location, team_data|
     if team_data[:team_name].include?(team_name)
-      team_data[:players].values.collect do |key, value|
-      array << key[:number]
+      team_data[:players].values.collect do |player_stats|
+      array << player_stats[:number]
+      binding.pry
      end
     end
   end
